@@ -11,3 +11,10 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # Customize to your needs...
+bindkey "^[[5~" history-search-backward # PageUp
+bindkey "^[[6~" history-search-forward  # PageDown
+
+alias less="less -R"
+alias grep="grep --color=auto"
+alias feh="feh --magick-timeout 0"
+alias vim="TERM='xterm-256color' vim"
