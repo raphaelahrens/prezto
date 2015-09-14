@@ -19,3 +19,9 @@
 [submodule "modules/autosuggestions/external"]
 	path = modules/autosuggestions/external
 	url = https://github.com/tarruda/zsh-autosuggestions
+[submodule "modules/freebsd"]
+	path = modules/freebsd
+	url = /home/tant/git/freebsd.zprezto/
+[submodule "modules/tant"]
+	path = modules/tant
+	url = /home/tant/git/tant.prezto/
