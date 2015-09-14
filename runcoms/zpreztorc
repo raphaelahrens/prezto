@@ -29,7 +29,7 @@ zstyle ':prezto:load' pmodule \
   'editor' \
   'history' \
   'spectrum' \
-  'utility' \
+  'tant' \
   'completion' \
   'prompt'
 
