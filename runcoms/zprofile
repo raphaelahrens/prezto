@@ -33,6 +33,7 @@ typeset -gU cdpath fpath mailpath path
 path=(
   /usr/games/
   /sbin/
+  /usr/local/{bin,sbin}
   "$HOME/bin/"
   $path
 )
