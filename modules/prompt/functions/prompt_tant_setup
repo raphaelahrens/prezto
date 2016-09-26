@@ -1,1 +1,83 @@
-/home/tant/git/tant.theme/prompt_tant_setup
+#
+# A colorful, friendly, multiline theme with some handy features.
+#
+# Authors:
+#
+# Features:
+#   - Simple VCS branch, staged, and unstaged indication.
+#   - Prompt character is different in a VCS repository.
+#   - Last command exit status is displayed when non-zero.
+#
+# Screenshots:
+#   http://i.imgur.com/rCo3S.png
+#
+
+function +vi-set_novcs_prompt_symbol {
+  _prompt_tant_symbol='»'
+}
+
+function +vi-set_vcs_prompt_symbol {
+  _prompt_tant_symbol='±'
+}
+
+function +vi-git_precmd {
+  # Check for untracked files, since vcs_info does not.
+  if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then
+    hook_com[unstaged]+='%F{yellow}✭%f'
+  fi
+}
+
+function prompt_tant_precmd {
+  # Replace '/home/<user>' with '~'.
+  _prompt_tant_pwd="${PWD/#$HOME/~}"
+  _prompt_tant_pwd="${_prompt_tant_pwd/#\/usr$HOME/~}"
+  vcs_info
+}
+
+function prompt_tant_setup {
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+  prompt_opts=(cr percent subst)
+
+  # Load required functions.
+  autoload -Uz vcs_info
+  autoload -Uz add-zsh-hook
+
+  # Add hook to set up prompt parameters before each command.
+  add-zsh-hook precmd prompt_tant_precmd
+
+  # Set editor-info parameters.
+  zstyle ':prezto:module:editor:info:completing' format '%F{green}...%f'
+  zstyle ':prezto:module:editor:info:keymap:alternate' format '%F{yellow}--- COMMAND ---%f'
+
+  # Set vcs_info parameters.
+  zstyle ':vcs_info:*' branchformat '%b[%r] '
+  zstyle ':vcs_info:*' check-for-changes true
+  zstyle ':vcs_info:*' formats ' %F{yellow}%s:%b%f [%c%u]'
+  zstyle ':vcs_info:*' actionformats ' %F{magenta}%b%f %c%u %F{yellow}(%a)%f'
+  zstyle ':vcs_info:*' stagedstr '%F{green}✚%f'
+  zstyle ':vcs_info:*' unstagedstr '%F{blue}✹%f'
+
+  # ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%}"
+  # ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%}"
+  # ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}✖"
+  # ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[magenta]%}➜"
+  # ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%}═"
+  # ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%}"
+
+  # Set vcs_info hooks.
+  # NOTE: Prior to Zsh v4.3.12, there are no static hooks, no vcs_info_hookadd
+  #       function, and no 'no-vcs' hook.
+  zstyle ':vcs_info:*+start-up:*' hooks set_novcs_prompt_symbol
+  zstyle ':vcs_info:git*+set-message:*' hooks set_vcs_prompt_symbol git_precmd
+  zstyle ':vcs_info:*+set-message:*' hooks set_vcs_prompt_symbol
+
+  # Define prompts.
+  PROMPT='%(?..%F{red}%B-> [%?]%b%f
+)%F{green}%n%f@%F{yellow}%m%f:%F{green}${_prompt_tant_pwd}%f${vcs_info_msg_0_}
+%F{red}${_prompt_tant_symbol}%f '
+  RPROMPT='${editor_info[keymap]}'
+  SPROMPT='zsh: correct %F{magenta}%R%f to %F{green}%r%f [nyae]? '
+}
+
+prompt_tant_setup "$@"
