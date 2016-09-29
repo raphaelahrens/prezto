@@ -73,8 +73,9 @@ function prompt_tant_setup {
   zstyle ':vcs_info:*+set-message:*' hooks set_vcs_prompt_symbol
 
   # Define prompts.
+  if [ $UID -eq 0 ]; then ncolor="red"; else ncolor="green"; fi
   PROMPT='%(?..%F{red}%B-> [%?]%b%f
-)%F{green}%n%f@%F{yellow}%m%f:%F{green}${_prompt_tant_pwd}%f${vcs_info_msg_0_}
+)%F{$ncolor}%n%f@%F{yellow}%m%f:%F{green}${_prompt_tant_pwd}%f${vcs_info_msg_0_}
 %F{red}${_prompt_tant_symbol}%f '
   RPROMPT='${editor_info[keymap]}'
   SPROMPT='zsh: correct %F{magenta}%R%f to %F{green}%r%f [nyae]? '
