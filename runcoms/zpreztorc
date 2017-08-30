@@ -32,6 +32,7 @@ zstyle ':prezto:load' pmodule \
   'freebsd' \
   'tant' \
   'completion' \
+  'python' \
   'prompt'
 
 #
