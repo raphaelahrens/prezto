@@ -1,0 +1,54 @@
+#
+# create a python module with the correct module hierarchy
+# including directories and __init__.py files.
+#
+# Example:
+#   > pymkmodule moduleA/moduleB/lol.py
+#   
+#   creates moduleA
+#           |- moduleB
+#           |  |- __init__.py
+#           |  |- lol.py
+#           |- __init__.py  
+#
+# Authors:
+#   Raphael Ahrens <raphaelahrens@gmail.com>
+#
+
+
+function help() {
+    printf 'usage:\n   pymkmodule module1/module2/module3.py\n'
+}
+
+
+function pymkmodule() {
+	if [[ $# -ne 1 ]]; then
+        help
+        return 1
+	fi
+
+    local file_path=$1
+    local file=$(basename $1)
+    local l_path=$(dirname $file_path)
+
+    if [[ -e $file_path ]]; then
+        printf 'Sorry, file already exists.\n'
+        help
+        return 2
+    fi
+
+    if [[ ${file[-3,-1]} != '.py' ]]; then
+        printf 'Sorry, but the file should end with ".py"\n'
+        help
+        return 3
+    fi
+
+    mkdir -p $l_path
+	while [[ $l_path != "/" && $l_path != "." ]]; do
+        touch "$l_path/__init__.py"
+        l_path=$(dirname $l_path)
+	done
+    touch $file_path
+}
+
+pymkmodule "$@"
