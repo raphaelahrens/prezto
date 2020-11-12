@@ -35,6 +35,7 @@ path=(
   /sbin/
   /usr/local/{bin,sbin}
   "$HOME/bin/"
+  "$HOME/.cargo/bin"
   $path
 )
 
